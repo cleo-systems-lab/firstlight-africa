@@ -2956,6 +2956,9 @@ footer { font-size: 0.75rem; }
 
   .signal-rail { padding: 12px 14px; }
 
+  /* At phone width the caption would sit on the Sahara; the atlas legend already says it. */
+  .map-label.label-origin { display: none; }
+
   .signal-tape {
     flex-wrap: wrap;
     gap: 2px 12px;
