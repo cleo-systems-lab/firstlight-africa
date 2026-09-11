@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <meta name="referrer" content="no-referrer" />
+    <title>FIRSTLIGHT — African tourism opportunity intelligence</title>
+    <meta
+      name="description"
+      content="A passport-aware desk for time-sensitive African tourism signals — visas, routes, fares, fees and currency — with every claim dated, sourced and honest about what is still uncertain."
+    />
+    <meta name="theme-color" content="#050a09" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="canonical" href="https://cleo-systems-lab.github.io/firstlight-africa/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FIRSTLIGHT" />
+    <meta property="og:title" content="FIRSTLIGHT — see the opening before the crowd" />
+    <meta property="og:description" content="African tourism openings ranked for the passport you carry. Every signal dated, sourced and honest about what is still uncertain." />
+    <meta property="og:url" content="https://cleo-systems-lab.github.io/firstlight-africa/" />
+    <meta property="og:image" content="https://cleo-systems-lab.github.io/firstlight-africa/assets/og-card.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FIRSTLIGHT: an equal-area map of Africa beside the line “See the opening before the crowd.”" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./assets/styles.css" />
+    <link rel="modulepreload" href="./assets/policy-engine.js" />
+    <link rel="modulepreload" href="./assets/map-geometry.js" />
+    <link rel="preload" href="./data/opportunities.json" as="fetch" type="application/json" crossorigin />
+    <link rel="preload" href="./data/africa-map.json" as="fetch" type="application/json" crossorigin />
+    <link rel="preload" href="./data/source-registry.json" as="fetch" type="application/json" crossorigin />
+    <script type="module" src="./assets/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to intelligence desk</a>
+
+    <div class="app-shell">
+      <aside class="nav-rail" aria-label="Primary navigation">
+        <a class="brand-mark" href="#overview" aria-label="FIRSTLIGHT home">
+          <span class="brand-glyph" aria-hidden="true">
+            <svg viewBox="0 0 44 44" role="img">
+              <path d="M22 3 38 12v20L22 41 6 32V12Z" />
+              <path d="m14 28 8-15 8 15-8-4Z" />
+            </svg>
+          </span>
+          <span class="brand-word">FL</span>
+        </a>
+
+        <nav class="rail-nav">
+          <a class="rail-link is-active" href="#overview" data-view-link="overview" aria-label="Overview">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z" /></svg>
+            <span>Desk</span>
+          </a>
+          <a class="rail-link" href="#atlas" data-view-link="atlas" aria-label="Opportunity atlas">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 6 5-3 8 3 5-3v15l-5 3-8-3-5 3V6Zm5-1v11m8-8v11" /></svg>
+            <span>Atlas</span>
+          </a>
+          <a class="rail-link" href="#feed" data-view-link="feed" aria-label="Intelligence feed">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14M5 12h14M5 19h9" /></svg>
+            <span>Feed</span>
+          </a>
+          <a class="rail-link" href="#capture" data-view-link="capture" aria-label="Commercial capture ideas">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 7.5C7 5.6 9.2 4 12 4s5 1.6 5 3.5S14.8 11 12 11s-5 1.6-5 3.5S9.2 18 12 18s5-1.6 5-3.5" /></svg>
+            <span>Capture</span>
+          </a>
+          <a class="rail-link" href="#saved" data-view-link="saved" aria-label="Saved trips and watchlist">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v17l-6-4-6 4V4Z" /></svg>
+            <span>Saved</span>
+          </a>
+        </nav>
+
+        <div class="rail-foot" aria-hidden="true">
+          <span class="snapshot-dot"></span>
+          <span id="rail-stamp">SNAP<br />SHOT</span>
+        </div>
+      </aside>
+
+      <main id="main-content">
+        <header class="topbar">
+          <div class="wordmark">
+            <span>FIRSTLIGHT</span>
+            <small>A Cleo Systems intelligence product</small>
+          </div>
+
+          <div class="topbar-actions">
+            <button class="search-trigger" id="search-trigger" type="button" aria-haspopup="dialog" aria-label="Search signals">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>
+              <span>Search signals</span>
+              <kbd id="search-kbd">Ctrl K</kbd>
+            </button>
+
+            <label class="passport-control">
+              <span>Passport lens</span>
+              <select id="passport-select" aria-label="Choose passport lens">
+                <option value="UGA">Loading African passports…</option>
+              </select>
+            </label>
+          </div>
+        </header>
+
+        <section class="signal-tape" id="signal-tape" data-state="current" aria-label="Evidence notice">
+          <div class="tape-label" id="tape-label">Source-backed snapshot</div>
+          <p id="tape-copy">Official signals, live market observations and FIRSTLIGHT inferences remain visibly separate.</p>
+          <time id="as-of-time" datetime="2026-09-11">Loading review clock…</time>
+        </section>
+
+        <section class="desk" id="overview" aria-labelledby="desk-title">
+          <div class="desk-heading">
+            <div>
+              <p class="section-kicker">Africa-origin intelligence desk</p>
+              <h1 id="desk-title">See the opening<br /><em>before the crowd.</em></h1>
+            </div>
+            <div class="desk-brief">
+              <p>
+                Policy, access, routes and price distortions — ranked for the passport
+                you carry and the business you can build.
+              </p>
+              <div class="brief-stats" aria-label="Desk summary">
+                <span><strong id="signal-count">—</strong> signals</span>
+                <span><strong id="recheck-count">—</strong> need recheck</span>
+                <span><strong id="live-count">—</strong> effective</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="atlas-layout" id="atlas">
+            <section class="atlas-card" aria-labelledby="atlas-title">
+              <div class="panel-head">
+                <div>
+                  <p class="micro-label">Opportunity atlas</p>
+                  <h2 id="atlas-title">Policy pressure map</h2>
+                </div>
+                <div class="map-legend" aria-label="Map legend: colour shows evidence state">
+                  <span><i class="legend-dot yes" aria-hidden="true"></i>Effective, source current</span>
+                  <span><i class="legend-dot maybe" aria-hidden="true"></i>Recheck or future</span>
+                  <span><i class="legend-dot no" aria-hidden="true"></i>Not live or disputed</span>
+                  <span><i class="legend-hatch" aria-hidden="true"></i>No signal yet</span>
+                </div>
+              </div>
+
+              <div class="map-stage" id="map-stage">
+                <svg class="africa-map" id="africa-map" viewBox="0 0 720 680" role="img" aria-labelledby="africa-map-title africa-map-desc">
+                  <title id="africa-map-title">Africa opportunity pressure map</title>
+                  <desc id="africa-map-desc">Country boundaries from Natural Earth on an equal-area projection. Hatched countries mean no current signal in this snapshot, not no opportunity. The signal list below the map offers the same choices.</desc>
+                  <defs>
+                    <pattern id="unknown-hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(32)">
+                      <line x1="0" y1="0" x2="0" y2="9" />
+                    </pattern>
+                    <filter id="map-glow" x="-80%" y="-80%" width="260%" height="260%">
+                      <feGaussianBlur stdDeviation="4" result="blur" />
+                      <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                    </filter>
+                  </defs>
+                  <g id="country-layer"></g>
+                  <g id="route-layer"></g>
+                  <g id="map-markers"></g>
+                </svg>
+                <div class="map-label label-atlantic">Atlantic<br />corridors</div>
+                <div class="map-label label-indian">Indian Ocean<br />corridors</div>
+                <div class="map-label label-origin">55 passport lenses<br />one continent, many positions</div>
+
+                <div class="map-metric">
+                  <span class="metric-line"></span>
+                  <div>
+                    <small>Top adjusted signal</small>
+                    <strong id="map-high-score">—</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="signal-rail" id="signal-rail" role="group" aria-label="Signals on this map, highest ranked first"></div>
+
+              <div class="map-controls" id="type-filters" aria-label="Filter opportunity types">
+                <button class="filter-chip is-active" type="button" data-type="all" aria-pressed="true">All signals</button>
+                <button class="filter-chip" type="button" data-type="visa_change" aria-pressed="false">Visa & entry</button>
+                <button class="filter-chip" type="button" data-type="free_entry" aria-pressed="false">Free access</button>
+                <button class="filter-chip" type="button" data-type="route_launch" aria-pressed="false">New routes</button>
+                <button class="filter-chip" type="button" data-type="stopover_subsidy" aria-pressed="false">Stopovers</button>
+                <button class="filter-chip" type="button" data-type="fare_distortion" aria-pressed="false">Fares</button>
+                <button class="filter-chip" type="button" data-type="currency_bargain" aria-pressed="false">Currency</button>
+                <button class="filter-chip" type="button" data-type="tax_change" aria-pressed="false">Tax shifts</button>
+                <button class="filter-chip" type="button" data-type="admin_change" aria-pressed="false">Border friction</button>
+              </div>
+              <p class="map-provenance" id="map-provenance">Loading geographic provenance…</p>
+            </section>
+
+            <aside class="focus-card" id="focus-card" aria-live="polite" aria-label="Selected opportunity">
+              <div class="focus-loading">
+                <span></span><span></span><span></span>
+              </div>
+            </aside>
+          </div>
+
+          <section class="state-key" aria-labelledby="state-key-title">
+            <div>
+              <p class="micro-label">Policy state language</p>
+              <h2 id="state-key-title">One announcement is not one entitlement.</h2>
+            </div>
+            <div class="state-row">
+              <span data-stage="announced">Announced</span>
+              <span data-stage="adopted">Adopted</span>
+              <span data-stage="signed">Signed</span>
+              <span data-stage="effective">Effective</span>
+              <span data-stage="suspended">Suspended</span>
+              <span data-stage="expired">Expired</span>
+              <span data-stage="uncertain">Uncertain</span>
+            </div>
+          </section>
+
+          <section class="scout-section" aria-labelledby="scout-title">
+            <div class="scout-copy">
+              <p class="micro-label">Scout layer / official weak signals</p>
+              <h2 id="scout-title">Before headlines.<br /><em>Never before evidence.</em></h2>
+              <p>FIRSTLIGHT watches issuing authorities, gazettes, airline network notices, live carrier calendars and destination-cost notices. An early signal is not promoted until its source, dates, scope and uncertainty survive review.</p>
+            </div>
+            <div class="scan-grid" id="scan-grid" aria-live="polite"></div>
+          </section>
+
+          <section class="commons-section" id="commons" aria-labelledby="commons-title">
+            <div class="commons-head">
+              <div>
+                <p class="micro-label">The openings commons</p>
+                <h2 id="commons-title">Africa is not waiting<br />to be discovered. <em>It is setting the terms.</em></h2>
+              </div>
+              <p>See what governments are opening, what other countries can learn, and where citizens and service ecosystems can move next. This is competitive transparency for collaboration—not a league table.</p>
+            </div>
+            <div class="commons-toolbar">
+              <div class="commons-stats" id="commons-stats" aria-label="Continental opening summary"></div>
+              <div class="audience-switch" id="audience-switch" aria-label="Choose commons perspective">
+                <button class="is-active" type="button" data-audience="citizens" aria-pressed="true">For citizens</button>
+                <button type="button" data-audience="governments" aria-pressed="false">For governments</button>
+                <button type="button" data-audience="providers" aria-pressed="false">For providers</button>
+              </div>
+            </div>
+            <p class="commons-context" id="commons-context"></p>
+            <div class="country-board" id="country-board" aria-live="polite"></div>
+          </section>
+
+          <section class="opportunity-section" aria-labelledby="opportunity-title">
+            <div class="section-head-row">
+              <div>
+                <p class="micro-label">Passport-aware discovery</p>
+                <h2 id="opportunity-title">Ranked openings</h2>
+              </div>
+              <p class="section-note" id="passport-note">Re-ranked for a Ugandan passport lens.</p>
+            </div>
+            <div class="opportunity-grid" id="opportunity-grid" aria-live="polite"></div>
+          </section>
+
+          <section class="intelligence-section" id="feed" aria-labelledby="feed-title">
+            <div class="section-head-row">
+              <div>
+                <p class="micro-label">Evidence before excitement</p>
+                <h2 id="feed-title">Intelligence feed</h2>
+              </div>
+              <span class="auto-note"><i></i>Device-local watch mode</span>
+            </div>
+            <div class="feed-list" id="feed-list"></div>
+          </section>
+
+          <section class="capture-section" id="capture" aria-labelledby="capture-title">
+            <div class="capture-intro">
+              <p class="micro-label">Commercial capture</p>
+              <h2 id="capture-title">Turn friction shifts<br />into useful products.</h2>
+              <p>
+                The commercial layer is separated from legal entry claims. Each idea
+                carries its own condition and recheck point.
+              </p>
+            </div>
+            <div class="capture-grid" id="capture-grid"></div>
+          </section>
+
+          <section class="saved-section" id="saved" aria-labelledby="saved-title">
+            <div class="section-head-row">
+              <div>
+                <p class="micro-label">Personal fieldbook</p>
+                <h2 id="saved-title">Saved trips & quiet watches</h2>
+              </div>
+              <span class="saved-count" id="saved-count">0 saved</span>
+            </div>
+            <div class="saved-grid" id="saved-grid"></div>
+            <div class="fieldbook-export">
+              <div>
+                <strong>Carry your fieldbook with you — or leave no trace.</strong>
+                <span>Download your saved and watched IDs with the visible snapshot as portable JSON; the file is plain text and your device may sync it. On a borrowed or shared phone, clear everything FIRSTLIGHT kept in this browser.</span>
+              </div>
+              <div class="fieldbook-actions">
+                <button type="button" id="export-signals">Download your data</button>
+                <button type="button" id="clear-device" class="clear-device">Clear this device</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="method-section" id="method" aria-labelledby="method-title">
+            <div class="method-intro">
+              <p class="micro-label">Methods & source register</p>
+              <h2 id="method-title">A lead is useful only when you can inspect its ground.</h2>
+              <p id="method-copy">Loading editorial method…</p>
+              <div class="method-rules">
+                <span><b>Observed</b> what the linked source states</span>
+                <span><b>Inferred</b> FIRSTLIGHT score and capture possibilities</span>
+                <span><b>Missing</b> anything not yet evidenced or still in conflict</span>
+              </div>
+              <p class="operating-note"><b>Business model / who carries this?</b> Cleo Systems carries this public release. FIRSTLIGHT currently charges no user fee, takes no booking payment and earns no ticket commission on-site.</p>
+            </div>
+            <div class="source-register" id="source-register"></div>
+          </section>
+        </section>
+
+        <footer>
+          <span class="cleo-mark"><b>CLEO SYSTEMS</b> / FIRSTLIGHT 0.4</span>
+          <p>Planning intelligence only. Always confirm with the issuing authority and carrier before travel.</p>
+          <span>Designed from Kampala for African movement · one static page, no account, cookies or trackers</span>
+        </footer>
+      </main>
+    </div>
+
+    <dialog class="command-dialog" id="command-dialog" aria-labelledby="command-title">
+      <div class="command-box">
+        <div class="command-input-row">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6" /><path d="m16 16 4 4" /></svg>
+          <label class="sr-only" for="command-input">Search opportunities</label>
+          <input id="command-input" type="search" placeholder="Search country, shift, or business angle…" autocomplete="off" />
+          <button class="close-command" type="button" id="close-command" aria-label="Close search">Esc</button>
+        </div>
+        <p class="command-caption" id="command-title">Search every source-backed signal</p>
+        <div class="command-results" id="command-results"></div>
+      </div>
+    </dialog>
+
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <template id="empty-saved-template">
+      <div class="empty-saved">
+        <span aria-hidden="true">＋</span>
+        <div>
+          <strong>Your fieldbook is empty.</strong>
+          <p>Save an opening to compare it here. Nothing leaves this device.</p>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>
