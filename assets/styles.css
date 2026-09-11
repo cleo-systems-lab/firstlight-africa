@@ -2819,6 +2819,12 @@ select optgroup {
 
 .marker-anchor { fill: currentColor; }
 
+/* A taller stage on wide screens: the map was height-bound at 0.66 scale, which drew it small
+   and dropped desktop markers into compact dots. At 600px it draws at ~0.84 with scores on. */
+@media (min-width: 941px) {
+  .map-stage { min-height: 600px; }
+}
+
 .africa-map.is-compact .signal-marker .marker-pulse { display: none; }
 .africa-map.is-compact .signal-marker.is-selected .marker-pulse { display: inline; }
 .africa-map.is-compact .signal-marker:not(.is-selected) text { display: none; }
